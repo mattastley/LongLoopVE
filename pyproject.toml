@@ -14,7 +14,7 @@ dependencies = ["libxrk==0.13.0", "pyarrow>=18.1,<24", "numpy>=1.26,<3"]
 longloopve = "longloopve.cli:main"
 
 [dependency-groups]
-dev = ["pytest>=8,<10", "ruff>=0.11,<1"]
+dev = ["pytest>=8,<10", "ruff>=0.11,<1", "lz4>=4.3,<5", "defusedxml>=0.7,<1"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -1,7 +1,10 @@
 # LongLoopVE development
 
-- Target Linux with Python 3.11–3.14. Install using `uv sync --locked`.
-- Use `.agents/skills/aim-xrk-ingest/SKILL.md` for log-ingestion requests.
+- Target Linux with Python 3.11â€“3.14. Install using `uv sync --locked`.
+- Use `.agents/skills/aim-xrk-ingest/SKILL.md` for AIM log ingestion.
+- Use `.agents/skills/maxxecu-log-ingest/SKILL.md` for MaxxECU logs and
+  `.agents/skills/maxxecu-tune-ingest/SKILL.md` for MaxxECU tune evidence.
+- Keep the independently installable MaxxECU backend copies in sync.
 - Preserve decoder-returned channel timelines, values, and units. Keep alignment,
   engine mappings, and VE calculation separate from ingestion.
 - Never claim PDM8/32 validation without representative logs and Race Studio

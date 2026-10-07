@@ -11,7 +11,7 @@ are follow-on milestones.
 
 ## Install and use
 
-Requires Python 3.11–3.14 and [uv](https://docs.astral.sh/uv/).
+Requires Python 3.11â€“3.14 and [uv](https://docs.astral.sh/uv/).
 
 ```bash
 uv sync --locked
@@ -60,7 +60,7 @@ issues. Passing these checks does not establish sensor accuracy or VE readiness.
 `CorVE_BankB_UC12` are ECU math-channel suggestions that account for current VE,
 LTT, and STT/lambda correction. Their expressions remain unverified, and ingestion
 does not compute additional corrections. Tune breakpoints, math expressions, and
-the original VE table will come from a separate future MTune skill; no tune file
+the original VE table will come from the MaxxECU tune ingestion skill described below; no tune file
 is required for ingestion.
 
 ## Outputs
@@ -108,7 +108,7 @@ uv run --locked ruff format --check .
 uv run --locked pytest
 ```
 
-CI runs these checks on Linux with Python 3.11–3.14. See
+CI runs these checks on Linux with Python 3.11â€“3.14. See
 [the PDM validation procedure and roadmap](docs/validation.md). Keep recorded logs,
 exports, and generated datasets out of Git, especially because this repository is
 public.
@@ -121,3 +121,21 @@ public.
   calibration, channel completeness, and logger-variant problems.
 - [AIM's official DLL interface](https://docs.aim-sportline.com/racestudio3/html/xrk-dll.html),
   a possible future Windows validation/decoder adapter; not required on Linux.
+
+## MaxxECU log and tune skills
+
+Two independently installable skills are included alongside the AIM skill:
+
+- `.agents/skills/maxxecu-log-ingest`: MTune log packages, text/LZ4 logs and CSV samples.
+- `.agents/skills/maxxecu-tune-ingest`: standalone tunes and cataloged tune settings/tables.
+
+Invoke `$maxxecu-log-ingest` or `$maxxecu-tune-ingest` in an agent with repository skill discovery. For personal installation, copy either complete skill folder into `~/.codex/skills/`. Install its `requirements.txt` into your Python environment. Each folder includes the same backend so either skill works alone; both can share a catalog. Backend changes should be applied to both copies.
+
+```bash
+python -m pip install -r .agents/skills/maxxecu-log-ingest/requirements.txt
+python .agents/skills/maxxecu-log-ingest/scripts/maxxecu.py --catalog /outside/repo/catalog ingest /path/to/log.MaxxECU-Zip-log
+python .agents/skills/maxxecu-tune-ingest/scripts/maxxecu.py --catalog /outside/repo/catalog ingest /path/to/tune.MaxxECU-save
+python .agents/skills/maxxecu-tune-ingest/scripts/maxxecu.py --catalog /outside/repo/catalog show RECORD_ID --tables
+```
+
+The default catalog is `~/.maxxecu/catalog`; override it with `--catalog` or `MAXXECU_CATALOG`. Keep originals and catalogs outside Git. These skills preserve source evidence and report unknown units, timing and identities; they do not generate tuning recommendations or connect to an ECU. The MaxxECU JSON/CSV catalog is separate from AIM's Parquet output; ingestion does not align or combine those datasets.
