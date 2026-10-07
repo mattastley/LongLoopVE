@@ -35,6 +35,34 @@ uv run --locked longloopve ingest /path/to/session.xrk \
 Channel names above are examples. Inspect the actual logger configuration first.
 `.xrz` files are also supported through the same decoder.
 
+## MaxxECU Alpha-N channel profile
+
+The supplied `profiles/maxxecu-race-v1-alpha-n.json` records the user-confirmed
+MaxxECU Race v1 setup. Its VE axes are `RPM` and `ETPS_UC9` (electronic throttle-body
+position). AIM `TPS` is pedal position, so it is retained separately. `MAP` is
+diagnostic context for this profile.
+
+```bash
+uv run --locked longloopve inspect /path/to/session.xrk \
+  --profile profiles/maxxecu-race-v1-alpha-n.json
+uv run --locked longloopve ingest /path/to/session.xrk \
+  --output output/session \
+  --profile profiles/maxxecu-race-v1-alpha-n.json
+```
+
+Profiles validate required channel availability and exact logged unit strings
+before publishing an output. Optional missing/empty channels are reported by
+role. Unit mismatches fail rather than triggering conversion. The manifest
+records the profile definition, file hash, mapped roles, and per-role quality
+issues. Passing these checks does not establish sensor accuracy or VE readiness.
+
+`VE_Bank_A_UC5` and `VE_Bank_B_UC6` represent current bank VE. `CorVE_BankA_UC1` and
+`CorVE_BankB_UC12` are ECU math-channel suggestions that account for current VE,
+LTT, and STT/lambda correction. Their expressions remain unverified, and ingestion
+does not compute additional corrections. Tune breakpoints, math expressions, and
+the original VE table will come from a separate future MTune skill; no tune file
+is required for ingestion.
+
 ## Outputs
 
 ```text

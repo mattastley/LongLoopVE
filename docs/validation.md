@@ -47,7 +47,14 @@ checks help find problems but cannot prove completeness or correct calibration.
 
 ## Follow-on milestones
 
-1. Engine-specific channel mappings with explicit units and ECU fueling context.
+The MaxxECU Race v1 Alpha-N profile now maps engine roles with explicit units.
+RPM and electronic throttle-body position are the confirmed VE axes. Pedal TPS
+and MAP remain context. Current bank VE and ECU-generated CorVE suggestions are
+separate roles. Corrected-VE math expressions, bank assignments, interpolated
+table behavior, and independent decoder comparison remain unverified.
+
+1. A separate MTune skill to provide the original VE table, actual RPM/ETPS
+   breakpoints, and ECU math definitions. Ingestion does not depend on this skill.
 2. A folder ingestion service with completed-file detection, source-hash
    deduplication, retries, and deployment resource limits. Direct device download
    is a separate integration.

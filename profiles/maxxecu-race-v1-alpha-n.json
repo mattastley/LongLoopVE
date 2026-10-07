@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "name": "MaxxECU Race v1 Alpha-N with per-bank VE math channels",
+  "ecu": "MaxxECU Race v1",
+  "fueling_model": "alpha_n",
+  "ve_axes": ["engine_speed", "throttle_body_position"],
+  "interpretation": {
+    "axes": "User confirmed RPM and electronic throttle-body position. AIM TPS is pedal position and is not the throttle-body axis.",
+    "current_ve": "User confirmed VE_Bank_A/B represent current bank VE in the tune; whether the reported value is interpolated remains unverified.",
+    "suggested_ve": "CorVE_BankA/B are user-defined ECU math outputs intended to combine current VE, LTT and STT/lambda correction. The expression and validation are pending.",
+    "fuel_corrections": "Retain LTT and lambda correction separately for formula validation. Do not apply them again to CorVE without verifying its expression.",
+    "bank_assignment": "Physical cylinder-to-bank assignment is pending.",
+    "table_grid": "Actual RPM and throttle-body-position breakpoints are pending.",
+    "map": "MAP is diagnostic context only for this Alpha-N tune. Its pressure convention is not confirmed."
+  },
+  "channels": {
+    "engine_speed": {"channel": "RPM", "units": "rpm", "required": true},
+    "throttle_body_position": {"channel": "ETPS_UC9", "units": "%", "required": true},
+    "pedal_position": {"channel": "TPS", "units": "%", "required": false},
+    "current_ve_bank_a": {"channel": "VE_Bank_A_UC5", "units": "%", "required": true},
+    "current_ve_bank_b": {"channel": "VE_Bank_B_UC6", "units": "%", "required": true},
+    "suggested_ve_bank_a": {"channel": "CorVE_BankA_UC1", "units": "%", "required": true},
+    "suggested_ve_bank_b": {"channel": "CorVE_BankB_UC12", "units": "%", "required": true},
+    "measured_lambda_bank_a": {"channel": "Lambda_A", "units": "lambda", "required": true},
+    "measured_lambda_bank_b": {"channel": "Lambda_B", "units": "lambda", "required": true},
+    "target_lambda": {"channel": "Lambda_Target", "units": "lambda", "required": true},
+    "lambda_correction_bank_a": {"channel": "Lambda_corr_A", "units": "%", "required": true},
+    "lambda_correction_bank_b": {"channel": "Lambda_corr_B", "units": "%", "required": true},
+    "long_term_trim_bank_a": {"channel": "LTT_Bank_A_UC7", "units": "%", "required": true},
+    "long_term_trim_bank_b": {"channel": "LTT_Bank_B_UC8", "units": "%", "required": true},
+    "total_fuel_trim_user_channel": {"channel": "TotFuelTrim_UC2", "units": "%", "required": false},
+    "total_fuel_trim_ecu_channel": {"channel": "FuelTrimTotal", "units": "%", "required": false},
+    "acceleration_enrichment": {"channel": "AccelEnric_UC10", "units": "%", "required": false},
+    "fuel_cut": {"channel": "FuelCut", "units": "%", "required": false},
+    "coolant_temperature": {"channel": "CoolantTemp", "units": "C", "required": false},
+    "intake_air_temperature": {"channel": "IntakeAirTemp", "units": "C", "required": false},
+    "manifold_pressure_diagnostic": {"channel": "MAP", "units": "bar", "required": false},
+    "barometric_pressure_diagnostic": {"channel": "BaroPress", "units": "bar", "required": false}
+  }
+}

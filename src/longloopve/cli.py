@@ -26,6 +26,9 @@ def main() -> int:
         subparser.add_argument("source", type=Path)
         subparser.add_argument("--timeout", type=positive_seconds, default=120)
         subparser.add_argument("--require-channel", action="append", default=[])
+        subparser.add_argument(
+            "--profile", type=Path, help="Engine-channel profile JSON (exact names and units)"
+        )
         if command == "ingest":
             subparser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
@@ -34,6 +37,7 @@ def main() -> int:
             args.source,
             output=getattr(args, "output", None),
             required=args.require_channel,
+            profile=args.profile,
             timeout=args.timeout,
         )
     except IngestionError as exc:

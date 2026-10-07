@@ -10,6 +10,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+from longloopve.profiles import load_profile
+
 
 class IngestionError(Exception):
     """An actionable input, decoder, or output failure."""
@@ -31,6 +33,7 @@ def run(
     *,
     output: Path | None = None,
     required: list[str] | None = None,
+    profile: Path | None = None,
     timeout: float = 120,
 ) -> dict:
     source = validate_source(source)
@@ -41,6 +44,10 @@ def run(
     reserved = False
     published = False
     try:
+        engine_profile = load_profile(profile) if profile is not None else None
+        required_channels = sorted(
+            set(required or []) | set(engine_profile.required_channels if engine_profile else [])
+        )
         if target is not None:
             target.parent.mkdir(parents=True, exist_ok=True)
             # Reserve exclusively, including when two processes choose the same target.
@@ -74,7 +81,7 @@ def run(
                             str(snapshot),
                             str(stage),
                             mode,
-                            *(required or []),
+                            *required_channels,
                         ],
                         stdout=diagnostics,
                         stderr=subprocess.STDOUT,
@@ -93,6 +100,8 @@ def run(
                     f"{tail or 'No diagnostics emitted.'}"
                 )
             manifest = json.loads((stage / "manifest.json").read_text(encoding="utf-8"))
+            if engine_profile is not None:
+                manifest["engine_profile"] = engine_profile.apply(manifest)
             manifest["source"] = {
                 "filename": source.name,
                 "sha256": digest,
