@@ -1,0 +1,4 @@
+interface:
+  display_name: "MaxxECU Tune Ingestion"
+  short_description: "Ingest MaxxECU tunes and retrieve catalog evidence"
+  default_prompt: "Use $maxxecu-tune-ingest to ingest these tunes and retrieve their catalog evidence."

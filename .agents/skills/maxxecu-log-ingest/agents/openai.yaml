@@ -1,0 +1,4 @@
+interface:
+  display_name: "MaxxECU Log Ingestion"
+  short_description: "Ingest MaxxECU logs and retrieve catalog evidence"
+  default_prompt: "Use $maxxecu-log-ingest to ingest these logs and retrieve their catalog evidence."

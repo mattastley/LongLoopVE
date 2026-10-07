@@ -15,3 +15,13 @@ output/
 *.csv
 core
 core.*
+
+# Private MaxxECU inputs and generated catalogs
+catalog/
+*.maxxecu-zip-log
+*.MaxxECU-Zip-log
+*.maxxecu-log
+*.MaxxECU-log
+*.maxxlog
+*.maxxecu-save
+*.MaxxECU-save

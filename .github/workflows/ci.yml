@@ -20,4 +20,7 @@ jobs:
       - run: uv run --locked ruff check .
       - run: uv run --locked ruff format --check .
       - run: uv run --locked pytest
+      - run: uv run --locked pytest tests/test_maxxecu_backend.py
+        env:
+          MAXXECU_TEST_SKILL: maxxecu-tune-ingest
       - run: uv run --locked longloopve --help
