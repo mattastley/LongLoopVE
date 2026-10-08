@@ -1,0 +1,24 @@
+{
+  "interpolation": "bilinear_clamped",
+  "layout_evidence": "REPLACE: record how MTune axis orientation, scaling and interpolation were confirmed",
+  "banks": {
+    "A": {
+      "table": "REPLACE_WITH_BANK_A_TABLE_NAME",
+      "rpm_axis": "X",
+      "etps_axis": "Y",
+      "order": "rpm_fast",
+      "rpm_scale": 1,
+      "etps_scale": 1,
+      "value_scale": 1
+    },
+    "B": {
+      "table": "REPLACE_WITH_BANK_B_TABLE_NAME",
+      "rpm_axis": "X",
+      "etps_axis": "Y",
+      "order": "rpm_fast",
+      "rpm_scale": 1,
+      "etps_scale": 1,
+      "value_scale": 1
+    }
+  }
+}

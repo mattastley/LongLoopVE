@@ -1,13 +1,17 @@
 # LongLoopVE
 
 AIM log ingestion for engine VE table analysis, targeting PDM8/PDM08 and PDM32
-recordings on Linux. The first milestone supplies a reusable Python ingestion
-package and a repository-local agent skill.
+recordings on Linux. It includes reusable ingestion, a persistent per-car CLI,
+dual-bank VE reconstruction, and Excel/PNG/MaxxECU tune exports.
+
+See [the calculator workflow](docs/calculator.md) for setup mappings, calibration
+history, filters, reconstruction rules, exports, and validation limits.
 
 **PDM8/32 decoding is not yet validated against Race Studio.** The ingestion
 commands work through `libxrk`; a real PDM log and matching export are needed to
-establish device support. VE calculations and unattended folder/device ingestion
-are follow-on milestones.
+establish device support. VE reconstruction and tune exports have synthetic
+regression coverage; real tune version/readback validation remains necessary.
+Unattended folder/device ingestion is a follow-on milestone.
 
 ## Install and use
 

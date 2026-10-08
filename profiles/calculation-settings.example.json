@@ -1,0 +1,8 @@
+{
+  "clt_min_f": 165,
+  "iat_max_f": 130,
+  "freshness_ms": 100,
+  "sanity_relative_tolerance": 0.05,
+  "min_observations": 1,
+  "color_scale": 45
+}

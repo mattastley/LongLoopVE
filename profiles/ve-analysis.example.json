@@ -1,0 +1,83 @@
+{
+  "name": "MaxxECU Alpha-N VE analysis SETUP TEMPLATE",
+  "setup_notes": "Inspect actual XRK channels. Replace placeholders and verify all units and inactive values. Add sanity factors only after checking tune math expressions.",
+  "identity_fields": {
+    "name": "Driver",
+    "car": "Vehicle"
+  },
+  "channels": {
+    "engine_speed": {
+      "channel": "RPM",
+      "units": "rpm"
+    },
+    "throttle_body_position": {
+      "channel": "ETPS_UC9",
+      "units": "%"
+    },
+    "current_ve_bank_a": {
+      "channel": "VE_Bank_A_UC5",
+      "units": "%"
+    },
+    "current_ve_bank_b": {
+      "channel": "VE_Bank_B_UC6",
+      "units": "%"
+    },
+    "suggested_ve_bank_a": {
+      "channel": "CorVE_BankA_UC1",
+      "units": "%"
+    },
+    "suggested_ve_bank_b": {
+      "channel": "CorVE_BankB_UC12",
+      "units": "%"
+    },
+    "lambda_correction_bank_a": {
+      "channel": "Lambda_corr_A",
+      "units": "%"
+    },
+    "lambda_correction_bank_b": {
+      "channel": "Lambda_corr_B",
+      "units": "%"
+    },
+    "long_term_trim_bank_a": {
+      "channel": "LTT_Bank_A_UC7",
+      "units": "%"
+    },
+    "long_term_trim_bank_b": {
+      "channel": "LTT_Bank_B_UC8",
+      "units": "%"
+    },
+    "acceleration_enrichment": {
+      "channel": "AccelEnric_UC10",
+      "units": "%",
+      "inactive": 0
+    },
+    "fuel_cut": {
+      "channel": "FuelCut",
+      "units": "%",
+      "inactive": 0
+    },
+    "coolant_temperature": {
+      "channel": "CoolantTemp",
+      "units": "C"
+    },
+    "intake_air_temperature": {
+      "channel": "IntakeAirTemp",
+      "units": "C"
+    },
+    "decel_cut": {
+      "channel": "REPLACE_WITH_DECEL_CUT_CHANNEL",
+      "units": "REPLACE_WITH_LOGGED_UNITS",
+      "inactive": 0
+    },
+    "ignition_cut": {
+      "channel": "REPLACE_WITH_IGNITION_CUT_CHANNEL",
+      "units": "REPLACE_WITH_LOGGED_UNITS",
+      "inactive": 0
+    },
+    "knock_retard": {
+      "channel": "REPLACE_WITH_KNOCK_RETARD_CHANNEL",
+      "units": "REPLACE_WITH_LOGGED_UNITS",
+      "inactive": 0
+    }
+  }
+}
