@@ -19,7 +19,8 @@ point on the VE table; the two CorVE channels supply the proposed VE values.
 
 These are the minimum signal inputs for the intended **CorVE-based method**,
 assuming the ECU math channels correctly include the intended fuel corrections.
-The actual math expressions still need verification. This is not a universal
+The supplied expression below still needs verification in the actual tune and
+recordings. This is not a universal
 minimum for other VE calculation methods.
 
 AIM `TPS` is pedal position in this setup. It cannot replace ETPS as the table
@@ -28,6 +29,80 @@ axis. MAP is diagnostic context rather than a table axis for this Alpha-N tune.
 Each signal needs usable values and timestamps covering the same operating
 periods. Four channel names alone do not establish sufficient data quality,
 coverage, or a complete table grid.
+
+## CorVE math channels in MaxxECU: purpose and setup
+
+`CorVE_BankA` and `CorVE_BankB` are custom math channels configured in MTune.
+They calculate a proposed VE value at the current operating point for each
+bank. They do not write that value into the VE table. The intention is to fold
+the bank's current VE, long-term trim (LTT), and active short-term/lambda fuel
+correction into one logged value that LongLoopVE can associate with RPM and ETPS.
+
+### Calculation and percentage conventions
+
+For corrections that represent separate multiplicative fuel factors, the
+intended calculation is:
+
+```text
+CorVE = CurrentVE * (1 + ShortTermCorrection / 100)
+                  * (1 + LongTermAdaptation / 100)
+                  * MeasuredLambda / TargetLambda
+```
+
+### Mini Script
+
+Assign inputs `A`–`E` separately for each bank using the comments below.
+
+```te
+-- A = Current VE
+-- B = Measured lambda
+-- C = Target lambda
+-- D = Short term lambda correction (%)
+-- E = Long term fuel adaptation (%)
+
+-- Replace this RTDATA name with the actual
+-- fuel acceleration enrichment channel
+-- selected using MTune autocomplete.
+local ae = RTDATA.ACC_ENRICHMENT
+
+-- Reject acceleration enrichment samples
+-- and allow lambda readings to settle.
+if ABS(ae) > 0.01 then
+    SETTMR(0, 0.15)
+end
+
+if GETTMR(0) > 0 then
+    return -1
+end
+
+-- Reject invalid inputs
+if ISNAN(A) == 1 or ISNAN(B) == 1 or
+   ISNAN(C) == 1 or ISNAN(D) == 1 or
+   ISNAN(E) == 1 then
+    return -1
+end
+
+if A <= 0 or B <= 0 or C <= 0 then
+    return -1
+end
+
+return A * (1 + D/100) *
+           (1 + E/100) * B/C
+```
+
+While `ABS(ae) > 0.01`, the script repeatedly starts a `0.15`-second timer.
+It returns `-1` while that timer is active, including the settling period after
+enrichment stops. It also returns `-1` for the invalid inputs explicitly checked
+above. **Treat `-1` as a rejected sample, never as a VE proposal.** Current
+ingestion preserves this finite value; rejection must be implemented by analysis.
+
+MaxxECU Mini Script timers are shared between expressions. Reserve timer `0`
+for this purpose. Both bank scripts can intentionally share it if they use the
+same enrichment signal and should reject together. Otherwise assign separate
+unused timer indices and update both timer calls in each script. Check other
+scripts for timer conflicts. These timer semantics are documented on the
+[Math channels page](https://www.maxxecu.com/webhelp/settings-advanced-math_channels.html).
+
 
 ## Signals for rejecting contaminated samples
 
@@ -47,11 +122,14 @@ four rejection signals**. Missing rejection signals reduce the ability to
 screen contaminated inputs; their absence should not be interpreted as proof
 that enrichment, fuel cut, or unsuitable temperatures were absent.
 
-The current code does not implement these filters. Rejection thresholds,
+The supplied ECU script handles enrichment using a `0.01` threshold and a
+`0.15`-second settling timer. It does not check coolant temperature, intake air
+temperature, or fuel cut. The current LongLoopVE code does not implement these
+filters or reject the script's `-1` sentinel. Additional rejection thresholds,
 percentage conventions (including what indicates inactive enrichment or fuel
 cut), temperature windows, and any exclusion period around transitions must be
 confirmed from the ECU settings and recorded behavior. No numerical thresholds
-are prescribed by this report.
+are prescribed here beyond the supplied script's enrichment check.
 
 ## Additional diagnostic and validation evidence
 
